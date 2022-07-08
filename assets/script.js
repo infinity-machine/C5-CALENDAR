@@ -10,30 +10,49 @@ function openEdit(event) {
     var editForm = document.createElement('form')
     var editInput = document.createElement('input')
     editInput.setAttribute('type', 'text')
-    var editSubmit = document.createElement('button')
-    editSubmit.innerText = 'EDIT'
-    editSubmit.addEventListener('click', function editSubmit(event) {
+    var editSubmitBtn = document.createElement('button')
+    editSubmitBtn.innerText = 'EDIT'
+    editForm.appendChild(editInput);
+    editForm.appendChild(editSubmitBtn);
+    event.target.replaceWith(editForm);
+    editSubmitBtn.addEventListener('click', function editSubmit(event) {
         event.preventDefault();
         var hourBoxEventEdit = document.createElement('p');
-        // if (editInput.value = ' ') hourBoxEventEdit.innerText = 'OPEN'
         hourBoxEventEdit.innerText = editInput.value;
-        editForm.replaceWith(hourBoxEventEdit);
+        // localStorage.setItem(container.children[i].firstChild.innerText, editInput.value)
+        console.log(localStorage)
+        if (editInput.value === '') {
+            editForm.replaceWith(hourBoxEvent)
+        }
+        else {
+            editForm.replaceWith(hourBoxEventEdit)
+        };
         hourBoxEventEdit.addEventListener('dblclick', openEdit);
+        console.log(container.children[0].firstChild.innerText)
     })
-    editForm.appendChild(editInput);
-    editForm.appendChild(editSubmit);
-    event.target.replaceWith(editForm); 
+    
 }
 
 for (i=8; i<20; i++) {
     var hourBox = document.createElement('div');
-    hourBox.style.backgroundColor = 'lightSkyBlue';
-    if (i < m.get('hours')) hourBox.style.backgroundColor = 'LightCoral';
-    if (i > m.get('hours')) hourBox.style.backgroundColor = 'LightSeaGreen';
+    if (i === m.get('hours')) {
+        hourBox.style.backgroundColor = 'lightSkyBlue'
+    };
+    if (i < m.get('hours')) {
+        hourBox.style.backgroundColor = 'LightCoral';
+    }
+    if (i > m.get('hours')) {
+        hourBox.style.backgroundColor = 'LightSeaGreen';
+    };
     var hourBoxTime = document.createElement('p');
     hourBoxTime.style.backgroundColor = 'white';
-    if (i<13) hourBoxTime.innerText = i + ':00 AM'; 
-    if (i>=13) hourBoxTime.innerText = (i - 12) + ':00 PM';
+    if (i<13) {
+        hourBoxTime.innerText = i + ':00 AM'
+    }; 
+    if (i>=13) {
+        hourBoxTime.innerText = (i - 12) + ':00 PM'
+    };
+
     var hourBoxEvent = document.createElement('p');
     hourBoxEvent.innerText = 'OPEN'; 
     container.appendChild(hourBox);
