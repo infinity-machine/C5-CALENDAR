@@ -1,4 +1,3 @@
-var container = document.querySelector(".container");
 m = moment();
 
 setInterval(function timeNow() {
@@ -6,58 +5,54 @@ setInterval(function timeNow() {
     DTHeading.innerText = moment().format('dddd, MMMM do YYYY, h:mm:ss a');
 }, 1000);
 
-function openEdit(event) {
-    var editForm = document.createElement('form')
-    var editInput = document.createElement('input')
-    editInput.setAttribute('type', 'text')
-    var editSubmitBtn = document.createElement('button')
-    editSubmitBtn.innerText = 'EDIT'
-    editForm.appendChild(editInput);
-    editForm.appendChild(editSubmitBtn);
-    event.target.replaceWith(editForm);
-    editSubmitBtn.addEventListener('click', function editSubmit(event) {
-        event.preventDefault();
-        var hourBoxEventEdit = document.createElement('p');
-        hourBoxEventEdit.innerText = editInput.value;
-        // localStorage.setItem(container.children[i].firstChild.innerText, editInput.value)
-        console.log(localStorage)
-        if (editInput.value === '') {
-            editForm.replaceWith(hourBoxEvent)
-        }
-        else {
-            editForm.replaceWith(hourBoxEventEdit)
-        };
-        hourBoxEventEdit.addEventListener('dblclick', openEdit);
-        console.log(container.children[0].firstChild.innerText)
-    })
-    
-}
-
 for (i=8; i<20; i++) {
+    // MAKE HOURBOXES
+    var container = document.querySelector(".container");
     var hourBox = document.createElement('div');
-    if (i === m.get('hours')) {
-        hourBox.style.backgroundColor = 'lightSkyBlue'
-    };
-    if (i < m.get('hours')) {
-        hourBox.style.backgroundColor = 'LightCoral';
-    }
-    if (i > m.get('hours')) {
-        hourBox.style.backgroundColor = 'LightSeaGreen';
-    };
+    hourBox.setAttribute('class', 'row')
+    // SET TIME
     var hourBoxTime = document.createElement('p');
-    hourBoxTime.style.backgroundColor = 'white';
+    hourBoxTime.setAttribute("class", "hour col-2")
     if (i<13) {
         hourBoxTime.innerText = i + ':00 AM'
     }; 
     if (i>=13) {
         hourBoxTime.innerText = (i - 12) + ':00 PM'
     };
-
-    var hourBoxEvent = document.createElement('p');
-    hourBoxEvent.innerText = 'OPEN'; 
-    container.appendChild(hourBox);
+    // EVENTS
+    var hourBoxEvent = document.createElement('textarea');
+    if (i === m.get('hours')) {
+        hourBoxEvent.setAttribute("placeholder", "OPEN");
+        hourBoxEvent.setAttribute("class", "col-8 present");
+    };
+    if (i < m.get('hours')) {
+        hourBoxEvent.setAttribute("placeholder", "CLOSED");
+        hourBoxEvent.setAttribute("class", "col-8 past");
+        hourBoxEvent.setAttribute("disabled", "true");
+    }
+    if (i > m.get('hours')) {
+        hourBoxEvent.setAttribute("placeholder", "OPEN");
+        hourBoxEvent.setAttribute("class", "col-8 future");
+    };
+    hourBoxEvent.textContent = localStorage.getItem(i)
+    // EDIT BUTTONS
+    var editBtn = document.createElement('button')
+    editBtn.innerText = 'edit event';
+    editBtn.setAttribute('class', 'col-2 saveBtn')
+    editBtn.setAttribute("id", i)
+    editBtn.addEventListener('click', saveToLocal)
+    // APPENDS
+    var container = document.querySelector(".container");
     hourBox.appendChild(hourBoxTime);
     hourBox.appendChild(hourBoxEvent);
-    hourBoxEvent.addEventListener('dblclick', openEdit);   
+    hourBox.appendChild(editBtn)
+    container.appendChild(hourBox);
+}
+// LOCAL STORAGE
+function saveToLocal(event) {
+    var key = event.target.id;
+    var value = event.target.previousElementSibling.value;
+
+    localStorage.setItem(key, value)
 }
 
